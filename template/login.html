@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Brand ชื่อระบบ · เข้าสู่ระบบ</title>  <!-- [แก้] ชื่อแบรนด์ + ระบบ -->
+<link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  // [แก้] ต้องตรงกับ DASH_KEY ใน dashboard.html (ธีมเดียวกัน + ส่งชื่อผู้ใช้ให้ Dashboard)
+  var DASH_KEY = 'brandDash';
+  try { var t = localStorage.getItem(DASH_KEY + 'Theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<style>
+  /* [แก้] tokens ชุดเดียวกับ dashboard.html (ค่าเดียวกันทั้ง 3 ชุด) · --hero-img = รูปการ์ดซ้าย (รูปของลูกค้าเอง ไม่มี = none) */
+  :root {
+    --page: #F4F7FA; --surface: #FFFFFF; --plane: #EEF3F8;
+    --ink: #2B2F36; --ink-2: #3D4B5C; --muted: #55687C; --gray: #8496A9; --line: #DCE4EB; --head: #12355B;
+    --accent: #1FB6C9; --accent-soft: #E8F6F8; --primary: #1B5FA8; --primary-2: #154C87;
+    --hero-bg: #0C2340; --hero-fade: 12,35,64; --hero-img: none; --stripe-2: #1FB6C9;
+    --font: "Prompt"; --on-primary: #FFFFFF; --mark-bg: url(/assets/mark.svg);
+    --crit: #C8102E; --crit-soft: #FDE7E8; --crit-line: #F5B8BC;
+    --glow: rgba(31,182,201,.22); --mark-op: .07;
+    --shadow: 0 1px 2px rgba(12,35,64,.05), 0 18px 48px rgba(12,35,64,.10);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page: #0B1522; --surface: #111F30; --plane: #172A3F;
+      --ink: #E8EEF4; --ink-2: #C7D3DF; --muted: #93A7BB; --gray: #7F93A8; --line: #23384F; --head: #EAF4FB;
+      --accent-soft: rgba(31,182,201,.14); --primary: #1F6BBE; --primary-2: #2A78CC;
+      --crit: #FF8A8F; --crit-soft: rgba(229,72,77,.16); --crit-line: rgba(255,138,143,.4);
+      --glow: rgba(31,182,201,.14); --mark-op: .05;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 18px 48px rgba(0,0,0,.4);
+      color-scheme: dark;
+    }
+    :root:not([data-theme="light"]) .logo-light { display: none; }
+    :root:not([data-theme="light"]) .logo-dark { display: block; }
+  }
+  :root[data-theme="dark"] {
+    --page: #0B1522; --surface: #111F30; --plane: #172A3F;
+    --ink: #E8EEF4; --ink-2: #C7D3DF; --muted: #93A7BB; --gray: #7F93A8; --line: #23384F; --head: #EAF4FB;
+    --accent-soft: rgba(31,182,201,.14); --primary: #1F6BBE; --primary-2: #2A78CC;
+    --crit: #FF8A8F; --crit-soft: rgba(229,72,77,.16); --crit-line: rgba(255,138,143,.4);
+    --glow: rgba(31,182,201,.14); --mark-op: .05;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 18px 48px rgba(0,0,0,.4);
+    color-scheme: dark;
+  }
+  :root[data-theme="dark"] .logo-light { display: none; }
+  :root[data-theme="dark"] .logo-dark { display: block; }
+
+  * { box-sizing: border-box; }
+  html { background: var(--page); }
+  body { margin: 0; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; overflow-x: hidden;
+         background: var(--page); color: var(--ink);
+         font: 15px/1.6 var(--font), -apple-system, "Segoe UI", "Noto Sans Thai", sans-serif; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .nw { white-space: nowrap; }
+  .icon { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+  /* พื้นหลัง: แสงฟุ้งมุมซ้ายบน + สัญลักษณ์แบรนด์จาง ๆ มุมขวาล่าง */
+  .bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .bg::before { content: ''; position: absolute; left: -180px; top: -220px; width: 720px; height: 520px; border-radius: 50%;
+                background: radial-gradient(closest-side, var(--glow), transparent); }
+  .bg::after { content: ''; position: absolute; right: -120px; bottom: -150px; width: 560px; height: 560px; opacity: var(--mark-op);
+               background: var(--mark-bg) center / contain no-repeat; }
+
+  main { position: relative; z-index: 1; flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 16px 56px; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 440px) minmax(0, 420px); gap: 28px; align-items: stretch; width: 100%; max-width: 900px; }
+
+  /* การ์ดภาพ: รูปของแบรนด์ด้านบน ไล่เป็นสีเข้มทึบใต้ข้อความ (ข้อความไม่ทับรูป) + แถบเฉียงสีเน้นมุมขวาบน */
+  .hero { position: relative; overflow: hidden; border-radius: 24px; color: #fff; min-height: 520px;
+          background: radial-gradient(120% 70% at 20% 0%, var(--primary), transparent 70%), var(--hero-bg);   /* พื้นตอนยังไม่มีรูป */
+          display: flex; flex-direction: column; justify-content: flex-end; padding: 28px; }
+  .hero .photo { position: absolute; z-index: 0; left: 0; right: 0; top: 0; height: 76%; background: var(--hero-img) 50% 12% / cover no-repeat; }
+  .hero::before { content: ''; position: absolute; z-index: 1; inset: 0;
+                  background: linear-gradient(180deg, rgba(var(--hero-fade),0) 40%, rgba(var(--hero-fade),.86) 66%, var(--hero-bg) 76%); }
+  .hero::after { content: ''; position: absolute; z-index: 1; top: 0; right: 0; width: 120px; height: 180px; opacity: .9;
+                 background: linear-gradient(200deg, var(--stripe-2), var(--primary)); clip-path: polygon(45% 0, 100% 0, 100% 100%); }
+  .hero-text { position: relative; z-index: 2; }
+  .hero .disp { margin: 0; }
+  .hero .disp img { display: block; width: auto; max-width: 220px; height: 64px; object-fit: contain; object-position: left center; }
+  .hero p { margin: 12px 0 0; font-size: 14px; color: #DCE8F3; max-width: 32ch; }
+  .hero .tagpill { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; font-size: 13px; color: #fff;
+                   padding: 6px 6px 6px 16px; border-radius: 999px; background: rgba(var(--hero-fade),.75); border: 1px solid rgba(255,255,255,.18); }
+  .hero .tagpill i { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); }
+
+  .card { position: relative; z-index: 1; width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 24px;
+          box-shadow: var(--shadow); padding: 34px 34px 28px; display: flex; flex-direction: column; justify-content: center; }
+  .brand { margin-bottom: 22px; }
+  .brand img { display: block; width: auto; max-width: 180px; height: 52px; object-fit: contain; object-position: left center; }
+  .brand .logo-dark { display: none; }
+  h1 { font-size: 26px; font-weight: 600; margin: 0; line-height: 1.3; color: var(--head); }
+  .sub { color: var(--muted); font-size: 14px; margin: 4px 0 22px; }
+
+  .err { display: none; align-items: flex-start; gap: 8px; margin-bottom: 16px; padding: 10px 14px; border-radius: 14px;
+         background: var(--crit-soft); border: 1px solid var(--crit-line); color: var(--crit); font-size: 13.5px; }
+  .err.show { display: flex; }
+  .err .icon { width: 18px; height: 18px; margin-top: 2px; }
+
+  label { display: block; font-size: 13.5px; font-weight: 500; color: var(--ink-2); margin: 14px 0 6px; }
+  .field { position: relative; }
+  input[type=text], input[type=password] { width: 100%; height: 48px; padding: 0 16px; border: 1px solid var(--line); border-radius: 14px;
+         background: var(--surface); color: var(--ink); font: inherit; font-size: 15px; transition: border-color .15s, box-shadow .15s; }
+  input:hover { border-color: var(--gray); }
+  input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .field input[type=password], .field input.shown { padding-right: 52px; }
+  .peek { position: absolute; top: 4px; right: 4px; width: 40px; height: 40px; border: 0; border-radius: 50%; background: none;
+          color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+  .peek:hover { color: var(--ink); background: var(--plane); }
+  .peek .icon { width: 19px; height: 19px; }
+
+  /* ปุ่มหลัก: แคปซูลสีหลัก ตัวขาว + วงกลมขาวลูกศร */
+  .submit { width: 100%; height: 52px; margin-top: 26px; padding: 0 6px 0 22px; border: 0; border-radius: 999px; cursor: pointer;
+            background: var(--primary); color: var(--on-primary); font: inherit; font-size: 16px; font-weight: 600;
+            display: flex; align-items: center; justify-content: space-between; gap: 8px; transition: background .15s; }
+  .submit:hover { background: var(--primary-2); }
+  .submit:disabled { opacity: .75; cursor: progress; }
+  .submit .dot { width: 40px; height: 40px; border-radius: 50%; background: var(--on-primary); color: var(--primary); display: grid; place-items: center; }
+  .submit .dot .icon { width: 18px; height: 18px; }
+  .foot { display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--muted); font-size: 12.5px; margin-top: 20px; }
+  .foot .icon { width: 14px; height: 14px; }
+
+  @media (max-width: 860px) {
+    .wrap { grid-template-columns: minmax(0, 1fr); max-width: 440px; gap: 16px; }
+    .hero { min-height: 0; height: 176px; padding: 20px 22px; }
+    .hero .photo { height: 100%; background-position: 50% 18%; }
+    .hero::before { background: linear-gradient(90deg, rgba(var(--hero-fade),.92) 0%, rgba(var(--hero-fade),.55) 55%, rgba(var(--hero-fade),.15) 100%); }
+    .hero p:not(.disp), .hero .tagpill { display: none; }
+    .hero .disp img { height: 48px; }
+    .hero::after { width: 80px; height: 120px; }
+  }
+  @media (max-width: 520px) {
+    main { padding: 20px 16px 40px; }
+    .card { padding: 26px 20px 22px; border-radius: 20px; }
+    .hero { border-radius: 20px; height: 150px; }
+  }
+</style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <main>
+    <div class="wrap">
+      <div class="hero">
+        <div class="photo" aria-hidden="true"></div>
+        <div class="hero-text">
+          <p class="disp"><img src="/assets/logo-white.svg" height="64" alt="Brand"></p>
+          <!-- [แก้] ประโยคบอกว่าหน้านี้ใช้ทำอะไร -->
+          <p>ประโยคเดียวว่าหน้านี้ใช้ดูอะไร เช่น ดูสถิติและรายการของระบบ Brand</p>
+          <span class="tagpill">Brand ชื่อระบบ Dashboard <i></i></span>
+        </div>
+      </div>
+
+      <!-- สัญญากับเซิร์ฟเวอร์: POST /auth/login (username, password, next) → ถูก = cookie + 302 ไป next · ผิด = 302 /login/?e=1&next=… -->
+      <form class="card" id="loginform" method="POST" action="/auth/login" autocomplete="on">
+        <div class="brand">
+          <img class="logo-light" src="/assets/logo.svg" height="52" alt="Brand">
+          <img class="logo-dark" src="/assets/logo-white.svg" height="52" alt="Brand">
+        </div>
+        <h1>เข้าสู่ระบบ</h1>
+        <p class="sub">Dashboard ผู้ดูแลระบบ Brand</p>  <!-- [แก้] ชื่อแบรนด์ -->
+        <div id="err" class="err" role="alert">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง ลองใหม่อีกครั้ง</span>
+        </div>
+        <label for="u">ชื่อผู้ใช้</label>
+        <input id="u" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus>
+        <label for="p">รหัสผ่าน</label>
+        <div class="field">
+          <input id="p" name="password" type="password" autocomplete="current-password" required>
+          <button type="button" class="peek" id="peek" aria-label="แสดงรหัสผ่าน" aria-pressed="false" title="แสดงรหัสผ่าน"></button>
+        </div>
+        <input type="hidden" name="next" id="next" value="/dashboard/">
+        <button type="submit" class="submit" id="submit"><span id="submittext">เข้าสู่ระบบ</span><span class="dot"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></button>
+        <div class="foot">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          สำหรับทีมงานเท่านั้น · การเข้าถึงถูกบันทึก  <!-- [แก้] หน้าที่ลูกค้าใช้ เช่น "เฉพาะผู้ได้รับสิทธิ์" -->
+        </div>
+      </form>
+    </div>
+  </main>
+<script>
+  const PENDING = DASH_KEY + 'UserPending';   // ชื่อที่กำลังเข้าสู่ระบบ — Dashboard ย้ายไปเป็นชื่อที่จำไว้เมื่อเข้าได้จริงเท่านั้น
+  const q = new URLSearchParams(location.search);
+  if (q.get('e')) {
+    document.getElementById('err').classList.add('show');
+    document.getElementById('p').setAttribute('aria-describedby', 'err');
+    try { sessionStorage.removeItem(PENDING); } catch (e) {}   // login ผิด: ไม่จำชื่อนี้
+  }
+  const nxt = q.get('next');   // รับเฉพาะ path ภายใน (กัน open redirect)
+  if (nxt && nxt.startsWith('/') && !nxt.startsWith('//') && !nxt.startsWith('/\\')) document.getElementById('next').value = nxt;
+
+  const pw = document.getElementById('p'), peek = document.getElementById('peek');
+  const EYE = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const EYE_OFF = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  peek.innerHTML = EYE;
+  peek.addEventListener('click', () => {
+    const show = pw.type === 'password';
+    pw.type = show ? 'text' : 'password'; pw.classList.toggle('shown', show);
+    peek.innerHTML = show ? EYE_OFF : EYE;
+    const t = show ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน';
+    peek.setAttribute('aria-label', t); peek.title = t; peek.setAttribute('aria-pressed', String(show));
+    pw.focus();
+  });
+
+  // กันกดซ้ำระหว่างรอ · กลับมาด้วยปุ่มย้อนกลับ (bfcache) ให้กดได้อีก
+  const form = document.getElementById('loginform'), btn = document.getElementById('submit'), btnText = document.getElementById('submittext');
+  form.addEventListener('submit', () => {
+    if (pw.type === 'text') pw.type = 'password';
+    try { sessionStorage.setItem(PENDING, document.getElementById('u').value.trim()); } catch (e) {}
+    btn.disabled = true; btnText.textContent = 'กำลังเข้าสู่ระบบ…';
+  });
+  addEventListener('pageshow', () => { btn.disabled = false; btnText.textContent = 'เข้าสู่ระบบ'; });
+</script>
+</body>
+</html>

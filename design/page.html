@@ -1,0 +1,287 @@
+<!doctype html>
+<!-- [แก้ 0] ตัวเลือกหน้าตา: เลือกจาก DESIGN BRIEF ด้านล่างตาม reference/design.md — ห้ามปล่อยค่าเริ่มต้นโดยไม่มีเหตุผลใน brief
+     data-shell side|top|single|wall|embed · data-hero banner|plain · data-density comfortable|compact · data-cards raised|outline|flat -->
+<html lang="th" data-shell="side" data-hero="banner" data-density="comfortable" data-cards="raised">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ชื่อระบบ</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/svg+xml" href="assets/mark.svg">
+<!--
+  DESIGN BRIEF [แก้ 1] — เขียนก่อนแตะโค้ด แล้วเก็บไว้ตรงนี้ (reference/design.md)
+  คนดู / ดูจากไหน   : …
+  มาเพื่อตัดสินใจ    : …
+  ต้องเห็นก่อนอย่างอื่น : …
+  อารมณ์ / แบรนด์    : …
+  ตัดสินใจแล้ว        : shell=… · hero=… · density=… · cards=… · รูปทรง=… · ฟอนต์=… · สี=…
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  // [แก้ 2] คำนำหน้าคีย์ storage ของโปรเจกต์นี้ — ห้ามซ้ำกับโปรเจกต์อื่นที่อยู่โดเมนเดียวกัน
+  var DASH_KEY = 'brandDash';
+  // ธีม + แถบข้างย่อ ตั้งก่อนวาดหน้า กันกระพริบ · ไม่มีค่าที่เลือกไว้ = ตามระบบปฏิบัติการ
+  // ลองตัวเลือกอื่นโดยไม่แก้ไฟล์: ?shell=top&hero=plain&density=compact&cards=outline&theme=dark
+  (function () {
+    var d = document.documentElement, q = new URLSearchParams(location.search);
+    try {
+      var t = localStorage.getItem(DASH_KEY + 'Theme');
+      if (t === 'dark' || t === 'light') d.dataset.theme = t;
+      if (localStorage.getItem(DASH_KEY + 'SideMini')) d.classList.add('side-mini');
+    } catch (e) {}
+    ['shell', 'hero', 'density', 'cards', 'theme'].forEach(function (k) {
+      var v = q.get(k); if (v && /^[a-z]+$/.test(v)) d.setAttribute('data-' + k, v);
+    });
+  })();
+</script>
+<style>
+  /* ---------- [แก้ 3] tokens: สี ฟอนต์ รูปทรง ----------
+     ค่าด้านล่างเป็น placeholder (สีเดียวกับแม่แบบ) — แทนด้วยชุดที่ได้จาก reference/design.md (CI ของลูกค้า หรืออารมณ์ที่เลือก) ทั้ง 3 ชุด
+     แล้วรัน `python3 design/check_tokens.py <ไฟล์นี้>` ต้องผ่านทุกคู่ (ตัวหนังสือบนพื้นทั้งโหมดสว่างและมืด)
+     --font-display = ฟอนต์หัวเรื่องและตัวเลขใหญ่ (ไม่ตั้ง = ใช้ --font) · --r-card/--r-inner/--r-ctl = รูปทรง */
+  :root {
+    --page: #F4F7FA; --surface: #FFFFFF; --plane: #EEF3F8; --chip: #E4ECF3;
+    --ink: #2B2F36; --ink-2: #3D4B5C; --muted: #55687C; --gray: #8496A9; --head: #12355B;
+    --line: #DCE4EB; --grid: #E8EEF3; --baseline: #BECEDD;
+    --accent: #1FB6C9; --accent-soft: #E8F6F8; --accent-line: #BDE7EE; --accent-ink: #0B7285; --link: #0B6BAF;
+    --primary: #1B5FA8; --primary-2: #154C87; --on-primary: #FFFFFF;
+    --side: linear-gradient(180deg, #1B5FA8 0%, #12355B 74%, #0C2340 100%); --side-ink: #FFFFFF; --side-sub: #BFD0E3;
+    --side-hover: rgba(255,255,255,.12); --side-line: transparent;
+    --nav-on: #1FB6C9; --nav-on-ink: #0C2340;
+    --pill-on: #12355B; --pill-on-ink: #FFFFFF;
+    --btn-dark: #12355B; --btn-dark-ink: #FFFFFF; --btn-dark-line: #12355B; --btn-dot-ink: #0C2340;
+    --ic-bg: linear-gradient(225deg, #1FB6C9, #1B5FA8); --ic-ink: #FFFFFF;
+    --bar: #1B4F8A; --track: #E6EDF3; --meter: linear-gradient(90deg, #1FB6C9, #1B5FA8);
+    --s1: #1B4F8A; --s2: #1FB6C9; --s3: #F29C38; --s4: #C3CFDB;
+    --ok: #0B7285; --ok-soft: #E3F4F6;
+    --warn: #B45309; --warn-mark: #F29C38; --warn-soft: #FEF1E2;
+    --crit: #C8102E; --crit-mark: #E5484D; --crit-soft: #FDE7E8;
+    --badge: #E5484D;
+    --crit-fill: #B42318; --crit-on: #FFFFFF; --warn-fill: #F2A93B; --warn-on: #2A1A00;   /* การ์ดที่มีปัญหาบนจอทีวี (สีทึบทั้งใบ) */
+    --banner-img: none; --stripe-1: #12355B; --stripe-2: #1FB6C9;
+    --font: "Prompt"; --mark-side: url(assets/mark-white.svg); --avatar-bg: #FFFFFF;
+    --glow: rgba(31,182,201,.20); --photo-op: 1; --mark-op: .08;
+    --shadow: 0 1px 2px rgba(12,35,64,.05), 0 8px 24px rgba(12,35,64,.06);
+    --pop-shadow: 0 16px 40px rgba(12,35,64,.16);
+    --r-card: 22px; --r-inner: 16px; --r-ctl: 999px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page: #0B1522; --surface: #111F30; --plane: #172A3F; --chip: #1A2E45;
+      --ink: #E8EEF4; --ink-2: #C7D3DF; --muted: #93A7BB; --gray: #7F93A8; --head: #EAF4FB;
+      --line: #23384F; --grid: #1C3146; --baseline: #34506B;
+      --accent-soft: rgba(31,182,201,.12); --accent-line: rgba(31,182,201,.35); --accent-ink: #5FD3E2; --link: #6CB8F0;
+      --side: linear-gradient(180deg, #163F6E 0%, #0D2747 74%, #081A30 100%); --side-line: #1C3146;
+      --pill-on: #E8EEF4; --pill-on-ink: #0B1522;
+      --btn-dark: #1A4F86; --btn-dark-line: #2A609A;
+      --bar: #4C9BE8; --track: #1C3146;
+      --s1: #4C9BE8; --s2: #5FD3E2; --s3: #F5A955; --s4: #3A4D63;
+      --ok: #5FD3E2; --ok-soft: rgba(31,182,201,.14);
+      --warn: #FDBA74; --warn-mark: #F5A955; --warn-soft: rgba(242,156,56,.16);
+      --crit: #FF8A8F; --crit-mark: #FF5C63; --crit-soft: rgba(229,72,77,.18);
+      --glow: rgba(31,182,201,.14); --photo-op: .28; --mark-op: .06;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+      --pop-shadow: 0 16px 40px rgba(0,0,0,.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page: #0B1522; --surface: #111F30; --plane: #172A3F; --chip: #1A2E45;
+    --ink: #E8EEF4; --ink-2: #C7D3DF; --muted: #93A7BB; --gray: #7F93A8; --head: #EAF4FB;
+    --line: #23384F; --grid: #1C3146; --baseline: #34506B;
+    --accent-soft: rgba(31,182,201,.12); --accent-line: rgba(31,182,201,.35); --accent-ink: #5FD3E2; --link: #6CB8F0;
+    --side: linear-gradient(180deg, #163F6E 0%, #0D2747 74%, #081A30 100%); --side-line: #1C3146;
+    --pill-on: #E8EEF4; --pill-on-ink: #0B1522;
+    --btn-dark: #1A4F86; --btn-dark-line: #2A609A;
+    --bar: #4C9BE8; --track: #1C3146;
+    --s1: #4C9BE8; --s2: #5FD3E2; --s3: #F5A955; --s4: #3A4D63;
+    --ok: #5FD3E2; --ok-soft: rgba(31,182,201,.14);
+    --warn: #FDBA74; --warn-mark: #F5A955; --warn-soft: rgba(242,156,56,.16);
+    --crit: #FF8A8F; --crit-mark: #FF5C63; --crit-soft: rgba(229,72,77,.18);
+    --glow: rgba(31,182,201,.14); --photo-op: .28; --mark-op: .06;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    --pop-shadow: 0 16px 40px rgba(0,0,0,.5);
+    color-scheme: dark;
+  }
+</style>
+<link rel="stylesheet" href="ui.css">
+<style>
+  /* [แก้ 4] CSS เฉพาะหน้านี้ — ให้น้อยที่สุด ของที่ใช้ซ้ำได้ให้ย้ายไป design/ui.css ของสกิล */
+  .hello { right: 300px; }                                   /* กันชน livechip + ปุ่มธีม */
+  .foot { margin: 22px 4px 0; }
+  .headline { display: grid; gap: 14px; }
+  .sec-body > .chips { margin-bottom: 14px; }
+  @media (max-width: 900px) { .hello { right: 250px; } }
+  @media (max-width: 600px) {
+    .hello { right: 150px; }
+    .livechip { padding: 0 12px; gap: 7px; font-size: 12px; }
+    .livechip .lc-label { display: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปเนื้อหา</a>
+<div class="shell">
+  <!-- แถบเมนู: ลบทั้ง <aside> ได้ถ้าไม่มีเมนู (shell single/wall/embed) — เมนูสร้างจาก LAYOUT ที่มี nav -->
+  <aside class="side" aria-label="เมนูหลัก">
+    <div class="brand">
+      <img class="logo-full" src="assets/logo-white.svg" height="56" alt="ชื่อระบบ">
+      <img class="logo-mark" src="assets/mark-white.svg" width="40" height="40" alt="">
+      <button type="button" class="burger" id="burger" aria-label="ย่อ/ขยายแถบเมนู" title="ย่อ/ขยายแถบเมนู"><span data-icon="menu"></span></button>
+    </div>
+    <nav id="sidenav" aria-label="ไปยังส่วนต่าง ๆ"></nav>
+    <div class="side-foot"><b>ชื่อระบบ</b>คำอธิบายสั้น</div>
+    <div class="side-art" aria-hidden="true"></div>
+  </aside>
+
+  <div class="main">
+    <header class="banner" id="top">
+      <div class="glow" aria-hidden="true"></div>
+      <div class="photo" aria-hidden="true"><i></i><i></i></div>
+      <div class="hello">
+        <p class="disp">ชื่อ<span>ระบบ</span></p>
+        <span class="tagline">คำอธิบายสั้น</span>
+      </div>
+      <div class="banner-tools">
+        <div class="livechip"><span id="pulse" class="pulse" aria-hidden="true"></span><span class="lc-label">ข้อมูล ณ</span><span id="updated">กำลังโหลด…</span></div>
+        <button type="button" class="roundbtn wall-hide" id="themeBtn" aria-label="สลับโหมดมืด/สว่าง"></button>
+      </div>
+    </header>
+    <p id="srStatus" class="sr-only" role="status" aria-atomic="true"></p>
+
+    <main class="content" id="main">
+      <div class="pagehead wall-hide">
+        <div><h1 id="pageTitle"></h1><span class="sub" id="pageSub"></span></div>
+        <div class="actions wall-hide">   <!-- ปุ่มต่าง ๆ ของหน้า ลบได้ (หน้าที่รีเฟรชเองไม่จำเป็นต้องมีปุ่มโหลดใหม่) -->
+          <button type="button" class="btn dark" id="reload">โหลดใหม่<span class="dot"><span data-icon="refresh"></span></span></button>
+        </div>
+      </div>
+      <div id="alert"></div>
+      <div class="flow" id="flow"></div>
+      <p class="foot sub" id="foot"></p>
+    </main>
+  </div>
+</div>
+
+<script src="ui.js"></script>
+<script>
+/* ===== [แก้ 5] CONFIG ของหน้า ===== */
+const PAGE = {
+  source: null,            // URL ของ JSON เช่น '/api/overview' · null = ข้อมูลตัวอย่างจาก demo()
+  refreshSec: 60,          // รีเฟรชเองทุกกี่วินาที (0 = ไม่รีเฟรช) · ข้ามรอบที่แท็บถูกซ่อน
+  staleSec: 0,             // ข้อมูลเก่ากว่ากี่วินาทีถือว่าค้าง (0 = 3 รอบ ไม่ต่ำกว่า 3 นาที)
+  at: UI.dataTime,         // เวลาของข้อมูล: generated_at ในข้อมูล หรือ header X-Generated-At/Last-Modified (ดู reference/serving.md)
+  title: 'ภาพรวมร้านค้าออนไลน์',
+  sub: 'ตัวอย่างด้วยข้อมูลสังเคราะห์ — section ด้านล่างคือรูปแบบให้เลือก ไม่ใช่ลำดับที่ต้องใช้',
+  foot: 'ข้อมูลตัวอย่าง (สังเคราะห์) · แทนด้วยแหล่งข้อมูลจริงของโปรเจกต์',
+};
+
+// ลำดับ = สิ่งที่คนดูต้องรู้ก่อนอยู่บน · w = ความกว้างในตาราง 12 ช่อง (ไม่ใส่ = เต็มแถว) · nav = ชื่อในเมนู (ไม่ใส่ = ไม่อยู่ในเมนู)
+// icon = ไอคอนหน้าหัวการ์ด (ไม่ใส่ = ไม่มีไอคอน) · title = หัวการ์ด (ไม่ใส่ = ไม่มีการ์ดครอบ เช่น แถว KPI) · cap = คำอธิบายใต้หัวการ์ด
+// เลือก section จาก "แบบของ section" ใน reference/design.md แล้วเขียน render ของมันเอง ลบที่ไม่ใช้ทิ้ง
+const LAYOUT = [
+  { id: 'kpis', render: renderKpis },
+  { id: 'status', title: 'สถานะแต่ละระบบ', icon: 'server', nav: 'สถานะระบบ', render: renderStatus },
+  { id: 'headline', title: 'ยอดขายเดือนนี้', icon: 'target', w: 4, nav: 'ยอดขาย', render: renderHeadline },
+  { id: 'trend', title: 'คำสั่งซื้อรายวัน 30 วัน', icon: 'chart', w: 8, render: renderTrend },
+  { id: 'products', title: 'สินค้าขายดี 7 วัน (เทียบ 7 วันก่อน)', icon: 'store', w: 5, nav: 'สินค้า', render: renderTop },
+  { id: 'events', title: 'เหตุการณ์ล่าสุด', icon: 'bell', w: 7, nav: 'เหตุการณ์', render: renderEvents },
+];
+
+// ---- render ของแต่ละ section: รับ (el, data) แล้ววาดด้วยชิ้นส่วนของ UI ----
+function renderKpis(el, d) {
+  el.classList.add('tiles'); el.style.setProperty('--n', d.kpis.length);
+  UI.patch(el, d.kpis.map(UI.tile).join(''));
+}
+function renderStatus(el, d, st) {
+  const n = t => d.systems.filter(x => x.state === t).length;
+  // คำสรุปซ่อนเมื่อข้อมูลค้าง (st.stale) — จอที่ค้างต้องไม่บอกว่า "ปกติ" · ลำดับการ์ดคงที่ตามข้อมูล ไม่เรียงใหม่ตามความรุนแรง
+  const chips = st.stale ? '' : `<div class="chips">${[['crit', 'ล่ม'], ['warn', 'ช้า'], ['ok', 'ปกติ']]
+    .filter(([t]) => n(t)).map(([t, w]) => UI.pill(t, `${w} ${n(t)}`)).join('')}</div>`;
+  UI.patch(el, chips + `<div class="grid" style="--min:250px">${d.systems.map(UI.statCard).join('')}</div>`);
+}
+function renderHeadline(el, d) {
+  const m = d.month;
+  UI.patch(el, `<div class="headline"><div class="bigstat">
+      <span class="bs-label">ยอดขายสะสม</span>
+      <span class="bs-value">${UI.esc(UI.fmtMillion(m.value))} <small>บาท</small></span>
+      <span class="bs-sub">${UI.delta(m.value, m.prev, { label: 'จากเดือนก่อนช่วงเดียวกัน' })}</span></div>
+    ${UI.sparkline(m.series)}
+    ${UI.meter({ label: `เป้าเดือนนี้ ${UI.fmtMillion(m.target)} บาท`, pct: m.value / m.target * 100, mode: 'target',
+                 mark: UI.monthPace().pct, markLabel: 'เดือนผ่านไปแล้ว' })}</div>`);
+}
+function renderTrend(el, d) {
+  const key = JSON.stringify(d.days);
+  if (el._k === key) return; el._k = key;
+  UI.barChart(el, { caption: 'คำสั่งซื้อรายวัน 30 วันล่าสุด', unit: 'คำสั่งซื้อ', ref: { value: 120, label: 'เป้า 120/วัน' },
+    points: d.days.map(x => ({ label: UI.fmtDay(x.at).replace(/ \d{4}$/, ''), title: UI.fmtDay(x.at), value: x.value })) });
+}
+function renderTop(el, d) { UI.patch(el, UI.rankList(d.top)); }
+function renderEvents(el, d) {
+  UI.patch(el, `<ul class="lrows">${d.events.map(e => `<li class="lrow">${UI.pill(e.tone, e.tag)}
+    <span class="lr-main" title="${UI.esc(e.text)}">${UI.esc(e.text)}</span><span class="lr-side">${UI.esc(UI.rel(e.at))}</span></li>`).join('')}</ul>`);
+}
+
+// ---- ข้อมูลตัวอย่าง (สังเคราะห์ทั้งหมด) — ลบเมื่อมี PAGE.source ----
+function demo() {
+  const now = Date.now(), day = 864e5; let s = 11;
+  const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  const days = Array.from({ length: 30 }, (_, i) => ({ at: now - (29 - i) * day, value: Math.round(70 + rnd() * 55 + i * 1.6) }));
+  return {
+    generated_at: new Date(now).toISOString(),
+    kpis: [
+      { icon: 'box', label: 'คำสั่งซื้อวันนี้', value: days[29].value, hint: `เมื่อวาน ${days[28].value}` },
+      { icon: 'money', label: 'ยอดขายวันนี้', value: '฿' + UI.fmtN(184250), hint: 'เฉลี่ย ฿1,458 ต่อคำสั่งซื้อ' },
+      { icon: 'clock', label: 'รอจัดส่งตอนนี้', value: 37, hint: 'เกิน 24 ชม. 4 รายการ', status: { tone: 'warn', text: 'เกินกำหนด 4' } },
+      { icon: 'check', label: 'ระบบที่ทำงานปกติ', value: '3/4', hint: 'ส่งอีเมลช้ากว่าปกติ' },
+    ],
+    systems: [
+      { name: 'หน้าร้านออนไลน์', icon: 'store', state: 'ok', stateText: 'ปกติ', nums: [['คำขอ/นาที', '412'], ['เวลาตอบ', '0.4 วิ']], foot: 'ตรวจล่าสุด 1 นาทีที่แล้ว' },
+      { name: 'ระบบชำระเงิน', icon: 'money', state: 'ok', stateText: 'ปกติ', nums: [['สำเร็จ', '99.2%'], ['ล้มเหลววันนี้', '3']], foot: 'ตรวจล่าสุด 1 นาทีที่แล้ว' },
+      { name: 'ส่งอีเมล', icon: 'chat', state: 'warn', stateText: 'ช้า', nums: [['คิวค้าง', '86'], ['เวลารอ', '7 นาที']], foot: 'ช้ากว่าปกติตั้งแต่ 10:12' },
+      { name: 'คลังสินค้า', icon: 'box', state: 'ok', stateText: 'ปกติ', nums: [['SKU ใกล้หมด', '12']], meter: { label: 'พื้นที่ดิสก์', pct: 71 }, foot: 'ซิงก์ล่าสุด 5 นาทีที่แล้ว' },
+    ],
+    month: { value: 3184000, prev: 2902000, target: 4500000, series: days.map(x => x.value) },
+    days,
+    top: [{ label: 'เสื้อยืดคอกลม', value: 214, prev: 190 }, { label: 'กระเป๋าผ้า', value: 168, prev: 181 }, { label: 'แก้วเก็บความเย็น', value: 131, prev: 96 },
+          { label: 'หมวกแก๊ป', value: 97, prev: 97 }, { label: 'สมุดโน้ต', value: 64, prev: 70 }],
+    events: [
+      { tone: 'warn', tag: 'ช้า', text: 'คิวส่งอีเมลยืนยันคำสั่งซื้อค้าง 86 ฉบับ', at: now - 18 * 60e3 },
+      { tone: 'crit', tag: 'ล้มเหลว', text: 'ชำระเงินไม่สำเร็จ 3 รายการจากธนาคารเดียวกัน', at: now - 52 * 60e3 },
+      { tone: 'ok', tag: 'เสร็จ', text: 'นำเข้าสต็อกรอบเช้า 1,240 รายการ', at: now - 3 * 3600e3 },
+      { tone: 'info', tag: 'แจ้ง', text: 'เริ่มแคมเปญลดราคา 11.11', at: now - 6 * 3600e3 },
+    ],
+  };
+}
+
+/* ===== โครงหน้า (ไม่ต้องแก้) ===== */
+const $ = id => document.getElementById(id);
+function build() {
+  LAYOUT.forEach((s, i) => {   // id ซ้ำกับของโครงหน้า (top, main, …) หรือซ้ำกันเอง เมนูจะชี้ผิดที่
+    if (!/^[a-z][\w-]*$/.test(s.id) || document.getElementById(s.id) || LAYOUT.findIndex(x => x.id === s.id) !== i) throw new Error(`LAYOUT: id "${s.id}" ซ้ำหรือใช้ไม่ได้`);
+  });
+  const set = (id, v) => { if ($(id)) $(id).textContent = v || ''; };
+  set('pageTitle', PAGE.title); set('pageSub', PAGE.sub); set('foot', PAGE.foot);
+  if ($('sidenav')) $('sidenav').innerHTML = [`<a class="nav" href="#top" data-sec="top"><span data-icon="grid"></span><span>ภาพรวม</span></a>`]
+    .concat(LAYOUT.filter(s => s.nav).map(s => `<a class="nav" href="#${s.id}" data-sec="${s.id}"><span data-icon="${s.icon || 'right'}"></span><span>${UI.esc(s.nav)}</span></a>`)).join('');
+  $('flow').innerHTML = LAYOUT.map(s => s.title
+    ? `<section id="${s.id}" class="card sec${s.w ? ' w' + s.w : ''}" aria-labelledby="${s.id}-h">
+         <div class="cardhead"><div><h2 id="${s.id}-h">${s.icon ? UI.icon(s.icon) : ''}${UI.esc(s.title)}</h2>${s.cap ? `<p class="cap">${UI.esc(s.cap)}</p>` : ''}</div></div>
+         <div class="sec-body"></div></section>`
+    : `<div id="${s.id}" class="${s.w ? 'w' + s.w : ''}"><div class="sec-body"></div></div>`).join('');
+}
+function render(d, st) {
+  LAYOUT.forEach(s => s.render(document.querySelector(`#${s.id} .sec-body`), d, st));
+}
+build();
+UI.initShell({ key: DASH_KEY });
+const feed = UI.live({ every: PAGE.refreshSec, staleSec: PAGE.staleSec, at: PAGE.at, render,
+                       load: () => PAGE.source ? UI.getJSON(PAGE.source) : demo() });
+if ($('reload')) $('reload').addEventListener('click', () => feed.refresh());
+</script>
+</body>
+</html>
