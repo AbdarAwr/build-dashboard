@@ -109,9 +109,9 @@ def test_page_check_catches_overflow_and_horizontal_scroll(browser, tmp_path):
 # ---------------------------------------------------------------- หน้าตั้งต้น: ทุกตัวเลือกหน้าตา
 def test_page_every_variant_fits_without_errors(browser, site):
     res = check(browser, site, sizes=[(390, 844), (820, 1180), (1440, 900)], schemes=["light", "dark"], ready=".statcard",
-                queries=["", "?shell=top&hero=plain&density=compact&cards=outline", "?shell=embed&cards=flat"])
+                queries=["", "?shell=top&density=compact", "?shell=single", "?shell=embed"])
     res += check(browser, site, sizes=[(1280, 720), (1920, 1080)], schemes=["dark"], ready=".statcard",
-                 queries=["?shell=wall&hero=plain&cards=flat"])
+                 queries=["?shell=wall&theme=dark", "?shell=wall"])
     bad = [(n, p) for n, p in res if p]
     assert not bad, bad
 
@@ -155,7 +155,7 @@ def test_theme_and_side_preferences_persist(browser, site):
 
 
 def test_wall_scales_to_screen_and_has_no_controls(browser, site):
-    page = open_page(browser, site + "?shell=wall&hero=plain", width=1280, height=720)
+    page = open_page(browser, site + "?shell=wall", width=1280, height=720)
     assert page.evaluate("document.documentElement.style.zoom") == "0.667"     # ออกแบบที่ 1920×1080 แล้วย่อตามจอ
     for sel in (".side", "#themeBtn", ".pagehead"):
         assert not page.locator(sel).is_visible(), sel
@@ -252,7 +252,7 @@ def test_delta_colours_follow_good_direction(browser, site):
 
 # ---------------------------------------------------------------- ทางแม่แบบ ENGINE ใช้ตัวเลือกหน้าตาเดียวกันได้
 @pytest.mark.parametrize("width", [390, 1440])
-@pytest.mark.parametrize("q", ["shell=top&hero=plain&density=compact&cards=outline", "shell=embed"])
+@pytest.mark.parametrize("q", ["shell=top&density=compact", "shell=embed"])
 def test_engine_template_accepts_layout_variants(browser, width, q):
     srv = serve_in_thread(auth=False)
     try:
@@ -330,7 +330,7 @@ def wall_page():
     """หน้าตั้งต้นที่เหลือแค่ KPI + สถานะ (ขนาดเนื้อหาแบบจอทีวีจริง)"""
     src = (DESIGN / "page.html").read_text(encoding="utf-8")
     keep = [l for l in src.split("\n") if not l.startswith(WALL_ONLY)]
-    return "\n".join(keep).replace('data-shell="side" data-hero="banner"', 'data-shell="wall" data-hero="plain" data-theme="dark"', 1)
+    return "\n".join(keep).replace('data-shell="side"', 'data-shell="wall" data-theme="dark"', 1)
 
 
 def test_wall_fits_the_screen_at_720p_1080p_and_4k(browser):

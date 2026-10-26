@@ -1,10 +1,9 @@
 /* =====================================================================================================
    ชุดดีไซน์ของสกิล build-dashboard — แหล่งเดียวของหน้าตาทุก dashboard (ทางแม่แบบ ENGINE และทางหน้าออกแบบเอง)
-   - สีและฟอนต์อยู่ใน token ของแต่ละโปรเจกต์ (ไฟล์นี้อ้างแค่ var(--...)) · รูปทรง: --r-card / --r-inner / --r-ctl
-     · ฟอนต์หัวเรื่อง/ตัวเลขใหญ่: --font-display (ไม่ตั้ง = ใช้ --font) · น้ำหนัก: --w-head, --w-num (ค่าเริ่มต้น 600)
-     · สีตัวเลขใหญ่: --num (ไม่ตั้ง = --head) · เส้นเป้า/เกณฑ์ในกราฟ: --ref, --ref-ink (ไม่ตั้ง = สีเตือน) · ป้าย: --r-pill · เงาเล็ก: --shadow-sm
-   - ตัวเลือกหน้าตาตั้งที่ <html>: data-shell (side|top|single|wall|embed) · data-hero (banner|plain) · data-density (comfortable|compact)
-     · data-cards (raised|outline|flat) — เลือกตาม reference/design.md
+   - หน้าตาเป็นธีมเดียวกันทุกงาน: โปรเจกต์เปลี่ยนได้แค่ token สีตาม CI (ไฟล์นี้อ้างแค่ var(--...)) และโลโก้
+     รูปทรง ฟอนต์ น้ำหนัก และสไตล์การ์ดเป็นของธีม ห้ามตั้งทับในโปรเจกต์
+     · สีเส้นเป้า/เกณฑ์ในกราฟ: --ref, --ref-ink (ไม่ตั้ง = สีเตือน) · การ์ดที่มีปัญหาบนจอทีวี: --crit-fill/--crit-on/--warn-fill/--warn-on
+   - ตัวเลือกที่ตั้งได้ที่ <html>: data-shell (side|top|single|wall|embed) = โครงเมนู · data-density (comfortable|compact) — เลือกตาม reference/design.md
    - template/dashboard.html ฝังไฟล์นี้ไว้ระหว่างเครื่องหมาย ui.css · แก้ที่นี่แล้วรัน `python3 design/sync.py` (เทสต์ตรวจว่าตรงกัน)
    ===================================================================================================== */
 * { box-sizing: border-box; }
@@ -28,7 +27,7 @@ a { color: inherit; }
 .shell { display: flex; min-height: 100vh; min-height: 100dvh; }
 .side { position: sticky; top: 12px; z-index: 3; flex: none; width: 252px; height: calc(100vh - 24px); height: calc(100dvh - 24px);
         margin: 12px 0 12px 12px; display: flex; flex-direction: column; overflow: hidden;
-        background: var(--side); color: var(--side-ink); border: 1px solid var(--side-line); border-radius: var(--r-card, 24px); transition: width .2s; }
+        background: var(--side); color: var(--side-ink); border: 1px solid var(--side-line); border-radius: 24px; transition: width .2s; }
 .brand { display: flex; align-items: center; gap: 10px; min-height: 104px; padding: 22px 14px 14px 26px; }
 .brand img { flex: none; display: block; }
 .brand .logo-full { width: auto; max-width: 150px; height: 56px; object-fit: contain; object-position: left center; }
@@ -38,7 +37,7 @@ a { color: inherit; }
 .burger:hover { background: var(--side-hover); }
 .burger .icon { width: 22px; height: 22px; }
 .side nav { position: relative; z-index: 1; display: grid; gap: 6px; padding: 8px 16px; }
-.nav { display: flex; align-items: center; gap: 12px; height: 46px; padding: 0 18px; border-radius: var(--r-ctl, 999px);
+.nav { display: flex; align-items: center; gap: 12px; height: 46px; padding: 0 18px; border-radius: 999px;
        color: var(--side-ink); text-decoration: none; font-size: 15px; white-space: nowrap; }
 .nav .icon { width: 20px; height: 20px; }
 .nav:hover { background: var(--side-hover); }
@@ -78,19 +77,19 @@ a { color: inherit; }
 .banner .photo i:nth-child(2) { left: calc(30% + 30px); background: var(--stripe-2); opacity: .85; }
 .hello { position: absolute; z-index: 1; left: 28px; right: 340px; top: 26px; display: grid; gap: 2px; }   /* right = กันชนปุ่มกระดิ่ง/โปรไฟล์ */
 .hello .disp, .hello .tagline { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.hello .disp { margin: 0; font: var(--w-head, 600) 30px/1.15 var(--font-display, var(--font)), sans-serif; letter-spacing: -.3px; color: var(--head); }
+.hello .disp { margin: 0; font: 600 30px/1.15 var(--font), sans-serif; letter-spacing: -.3px; color: var(--head); }
 .hello .disp span { color: var(--accent-ink); font-weight: 500; }
 .hello .tagline { font-size: 13px; color: var(--muted); }
 .banner-tools { position: absolute; z-index: 4; top: 22px; right: 28px; display: flex; align-items: center; gap: 18px; }
 .roundbtn { position: relative; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
-            box-shadow: var(--shadow-sm, 0 2px 10px rgba(0,0,0,.06)); display: grid; place-items: center; cursor: pointer; }
+            box-shadow: 0 2px 10px rgba(0,0,0,.06); display: grid; place-items: center; cursor: pointer; }
 .roundbtn:hover { border-color: var(--accent); }
 .roundbtn .icon { width: 20px; height: 20px; }
 .pop-wrap { position: relative; }
 .badge { position: absolute; top: -3px; right: -3px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px;
          background: var(--badge); color: #fff; font: 600 10.5px/18px var(--font), sans-serif; text-align: center; box-shadow: 0 0 0 2px var(--surface); }
 .profile { display: flex; align-items: center; gap: 10px; height: 48px; padding: 2px 14px 2px 2px; border: 1px solid var(--line); border-radius: 999px;
-           background: var(--surface); color: var(--ink); font: inherit; cursor: pointer; box-shadow: var(--shadow-sm, 0 2px 10px rgba(0,0,0,.06)); }
+           background: var(--surface); color: var(--ink); font: inherit; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
 .profile:hover { border-color: var(--accent); }
 .profile .avatar { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: var(--avatar-bg); box-shadow: inset 0 0 0 1px var(--line); }
 .profile .avatar img { width: 30px; height: 30px; display: block; object-fit: contain; }
@@ -129,12 +128,12 @@ a { color: inherit; }
 
 /* ---------- หัวหน้า + ตัวกรองช่วงเวลา ---------- */
 .pagehead { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
-h1 { font-family: var(--font-display, var(--font)), sans-serif; font-size: 26px; font-weight: var(--w-head, 600); margin: 0; line-height: 1.3; letter-spacing: -.2px; color: var(--head); }
+h1 { font-family: var(--font), sans-serif; font-size: 26px; font-weight: 600; margin: 0; line-height: 1.3; letter-spacing: -.2px; color: var(--head); }
 .sub { color: var(--muted); font-size: 13px; }
 .pagehead .sub { display: block; margin-top: 2px; }
 .pagehead .actions { margin-left: auto; display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 18px;
-       border: 1px solid var(--line); border-radius: var(--r-ctl, 999px); background: var(--surface); color: var(--ink);
+       border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink);
        font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; white-space: nowrap; }
 .btn:hover { border-color: var(--gray); }
 .btn .icon { width: 17px; height: 17px; }
@@ -166,21 +165,21 @@ h1 { font-family: var(--font-display, var(--font)), sans-serif; font-size: 26px;
 .dfield > .icon { grid-row: 1 / 3; grid-column: 2; width: 18px; height: 18px; color: var(--muted); }
 .dfield input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; opacity: 0; cursor: pointer; font: inherit; }
 .rp-actions { display: flex; justify-content: flex-end; gap: 8px; }
-.presets { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 4px; border-radius: var(--r-ctl, 24px); background: var(--chip); }
-.preset { height: 34px; padding: 0 15px; border: 0; border-radius: var(--r-ctl, 999px); background: transparent; color: var(--ink-2);
+.presets { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 4px; border-radius: 24px; background: var(--chip); }
+.preset { height: 34px; padding: 0 15px; border: 0; border-radius: 999px; background: transparent; color: var(--ink-2);
           font: inherit; font-size: 14px; cursor: pointer; white-space: nowrap; }
 .preset:hover { color: var(--ink); background: var(--surface); }
 .preset.on { background: var(--pill-on); color: var(--pill-on-ink); font-weight: 600; }
 /* ปุ่มเลือกตัวเลขในกราฟ (trend.metrics) — หน้าตาเดียวกับปุ่มช่วงเวลา แต่คลาสแยก ไม่ให้ syncRangeUI ไปปิด */
-.mseg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: var(--r-ctl, 22px); background: var(--chip); }
-.mopt { height: 30px; padding: 0 13px; border: 0; border-radius: var(--r-ctl, 999px); background: transparent; color: var(--ink-2);
+.mseg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 22px; background: var(--chip); }
+.mopt { height: 30px; padding: 0 13px; border: 0; border-radius: 999px; background: transparent; color: var(--ink-2);
         font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap; }
 .mopt:hover { color: var(--ink); background: var(--surface); }
 .mopt[aria-pressed="true"] { background: var(--pill-on); color: var(--pill-on-ink); font-weight: 600; }
 
 /* ---------- การ์ด ---------- */
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card, 22px); padding: 22px 24px; box-shadow: var(--shadow); }
-h2 { font-family: var(--font-display, var(--font)), sans-serif; font-size: 17px; font-weight: var(--w-head, 600); margin: 0 0 14px; line-height: 1.4; color: var(--head); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 22px 24px; box-shadow: var(--shadow); }
+h2 { font-family: var(--font), sans-serif; font-size: 17px; font-weight: 600; margin: 0 0 14px; line-height: 1.4; color: var(--head); }
 h2 .n { color: var(--muted); font-weight: 400; font-size: 13px; }
 .cardhead { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
 .cardhead h2 { margin: 0; }
@@ -194,7 +193,7 @@ h2 .n { color: var(--muted); font-weight: 400; font-size: 13px; }
 .tile .ic .icon { width: 24px; height: 24px; }
 .tile .tb { min-width: 0; flex: 1; container-type: inline-size; }   /* ตัวเลขย่อตามความกว้างการ์ด ไม่ล้นการ์ด */
 .tile .label { color: var(--ink-2); font-size: 14px; margin-bottom: 2px; }
-.tile .value { font-size: min(30px, 16cqi); font-weight: var(--w-num, 600); line-height: 1.2; letter-spacing: -.4px; color: var(--num, var(--head)); overflow-wrap: anywhere; }
+.tile .value { font-size: min(30px, 16cqi); font-weight: 600; line-height: 1.2; letter-spacing: -.4px; color: var(--head); overflow-wrap: anywhere; }
 .tile .value small { font-size: 16px; font-weight: 400; color: var(--muted); letter-spacing: 0; }
 .tile .hint { color: var(--muted); font-size: 12.5px; margin-top: 4px; }
 /* หลอดเพดาน/เป้า: ปกติไล่สีแบรนด์ · limit ตั้งแต่ 80% ส้ม + ป้าย · ครบ 100% แดง + ป้าย (ไม่ใช้สีอย่างเดียว) */
@@ -202,7 +201,7 @@ h2 .n { color: var(--muted); font-weight: 400; font-size: 13px; }
 .qbar span { display: block; height: 100%; border-radius: 999px; background: var(--meter); }
 .qbar.warn span { background: var(--warn-mark); }
 .qbar.crit span { background: var(--crit-mark); }
-.status { display: inline-flex; align-items: center; gap: 5px; margin-left: 8px; padding: 2px 9px; border-radius: var(--r-pill, 999px); font-size: 12px; font-weight: 600; vertical-align: 4px; letter-spacing: 0; }
+.status { display: inline-flex; align-items: center; gap: 5px; margin-left: 8px; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; vertical-align: 4px; letter-spacing: 0; }
 .status .icon { width: 13px; height: 13px; }
 .status.warn { background: var(--warn-soft); color: var(--warn); }
 .status.crit { background: var(--crit-soft); color: var(--crit); }
@@ -280,15 +279,15 @@ h2 .n { color: var(--muted); font-weight: 400; font-size: 13px; }
 /* ตารางรายการ + แบ่งหน้า */
 .search { position: relative; display: flex; align-items: center; }
 .search .icon { position: absolute; left: 14px; width: 17px; height: 17px; color: var(--muted); pointer-events: none; }
-.search input { height: 42px; width: 290px; padding: 0 14px 0 40px; border: 1px solid var(--line); border-radius: var(--r-ctl, 999px);
+.search input { height: 42px; width: 290px; padding: 0 14px 0 40px; border: 1px solid var(--line); border-radius: 999px;
                 background: var(--surface); color: var(--ink); font: inherit; font-size: 14px; }
 .search input:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--accent-soft); }
-.select { height: 42px; padding: 0 36px 0 16px; border: 1px solid var(--line); border-radius: var(--r-ctl, 999px); background: var(--surface); color: var(--ink);
+.select { height: 42px; padding: 0 36px 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink);
           font: inherit; font-size: 14px; cursor: pointer; -webkit-appearance: none; appearance: none;
           background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
           background-position: calc(100% - 19px) 18px, calc(100% - 14px) 18px; background-size: 5px 5px; background-repeat: no-repeat; }
 .select:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--accent-soft); }
-.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-inner, 16px); }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; }
 table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 #logtable { min-width: 660px; }
 th { text-align: left; color: var(--ink-2); font-weight: 600; font-size: 13px; padding: 12px 14px; white-space: nowrap;
@@ -304,7 +303,7 @@ td.go { width: 48px; padding: 8px 10px; }
 td.empty { text-align: center; color: var(--muted); padding: 28px; }
 .clip { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; line-height: 1; padding: 4px 9px 4px 8px;
-       border-radius: var(--r-pill, 999px); background: var(--plane); border: 1px solid var(--line); color: var(--ink-2);
+       border-radius: 999px; background: var(--plane); border: 1px solid var(--line); color: var(--ink-2);
        margin-right: 6px; vertical-align: 1px; white-space: nowrap; }
 .tag i { width: 8px; height: 8px; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(128,128,128,.3); }
 .gobtn { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; color: var(--muted); border: 1px solid transparent; }
@@ -365,7 +364,7 @@ td.empty { text-align: center; color: var(--muted); padding: 28px; }
            border-radius: 999px; background: var(--surface); color: var(--ink-2); font: inherit; font-size: 13.5px; cursor: pointer; }
 #thread { flex: 1; overflow-y: auto; padding: 22px 24px 28px; }
 /* มุมมองรายละเอียดแบบระเบียน / ลำดับเหตุการณ์ (recordHtml / timelineHtml) — สำหรับข้อมูลที่ไม่ใช่บทสนทนา */
-.rec { max-width: 880px; margin: 0 auto 16px; padding: 16px 20px; border: 1px solid var(--line); border-radius: var(--r-inner, 16px); background: var(--surface); }
+.rec { max-width: 880px; margin: 0 auto 16px; padding: 16px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
 .rec-head { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 12px; }
 .rec-title { font-size: 15px; color: var(--head); overflow-wrap: anywhere; }
 .rec-sub { display: block; font-size: 12.5px; color: var(--muted); }
@@ -420,7 +419,7 @@ td.empty { text-align: center; color: var(--muted); padding: 28px; }
         background: var(--surface); border: 1px dashed var(--gray); font-size: 12.5px; color: var(--ink-2); }
 .note .icon { width: 16px; height: 16px; margin-top: 2px; color: var(--muted); }
 .meta-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; font-size: 12px; color: var(--muted); }
-.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: var(--r-pill, 999px); font-size: 11.5px; line-height: 1.3;
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; line-height: 1.3;
         background: var(--plane); border: 1px solid var(--line); color: var(--ink-2); }
 .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(128,128,128,.3); }
 .empty { color: var(--muted); text-align: center; padding: 48px 16px; }
@@ -506,13 +505,13 @@ td.empty { text-align: center; color: var(--muted); padding: 28px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 
 /* =====================================================================================================
-   ตัวเลือกหน้าตา — เลือกจาก brief (reference/design.md) ไม่ใช่ใช้ค่าเริ่มต้นทุกงาน
+   โครงเมนูและความแน่น — เลือกจาก brief (reference/design.md) · สี รูปทรง ฟอนต์ และการ์ดยังเป็นธีมเดิม
    ===================================================================================================== */
 
 /* ---------- data-shell="top": แถบเมนูอยู่บนทุกขนาดจอ — หน้าที่มีไม่กี่ส่วน, ผู้บริหาร, หน้าที่อยากได้พื้นที่กว้าง ---------- */
 html[data-shell="top"] .shell { flex-direction: column; }
 html[data-shell="top"] .side { position: sticky; top: 8px; z-index: 5; width: auto; height: auto; margin: 8px 12px 0;
-                               flex-direction: row; align-items: center; border-radius: var(--r-card, 20px); }
+                               flex-direction: row; align-items: center; border-radius: 20px; }
 html[data-shell="top"] .brand { min-height: 0; padding: 9px 12px 9px 18px; }
 html[data-shell="top"] .brand .logo-full { height: 38px; max-width: 150px; }
 html[data-shell="top"] .burger, html[data-shell="top"] .side-art, html[data-shell="top"] .side-foot { display: none; }
@@ -527,12 +526,12 @@ html[data-shell="single"] .banner { margin: 0; }
 @media (min-width: 901px) { html[data-shell="single"] .content { padding: 4px 28px 56px; } }
 html[data-shell="single"] .shell { max-width: var(--page-max, none); margin: 0 auto; }
 
-/* ---------- data-shell="wall": จอทีวี/จอเปิดค้าง — ไม่มีเมนูและปุ่ม อ่านจากไกล 3–4 เมตร
+/* ---------- data-shell="wall": จอทีวี/จอเปิดค้าง — ธีมเดิม แต่ไม่มีเมนูและปุ่ม ตัวใหญ่อ่านจากไกล 3–4 เมตร
    ui.js ออกแบบที่ 1920×1080 แล้วย่อ/ขยายทั้งหน้าตามจอ · ตัวอักษรเล็กสุด 20px (≈ 13 มม. บนทีวี 55") ข้อความรองห้ามเล็กกว่านี้ ---------- */
 html[data-shell="wall"] body { font-size: 22px; line-height: 1.45; }
 html[data-shell="wall"] body, html[data-shell="wall"] .shell { min-height: 0; }   /* 100vh × zoom ของจอ 4K = สูงสองเท่าจอ */
 html[data-shell="wall"], html[data-shell="wall"] * { cursor: none !important; }   /* ไม่มีคนใช้เมาส์ */
-html[data-shell="wall"] .side, html[data-shell="wall"] .wall-hide, html[data-shell="wall"] .banner .photo { display: none !important; }
+html[data-shell="wall"] .side, html[data-shell="wall"] .wall-hide { display: none !important; }
 html[data-shell="wall"] .banner { height: 112px; margin: 0; }
 html[data-shell="wall"] .hello { right: 460px; top: 20px; }
 html[data-shell="wall"] .hello .disp { font-size: 46px; }
@@ -593,9 +592,6 @@ html[data-shell="embed"] .side, html[data-shell="embed"] .banner { display: none
 html[data-shell="embed"], html[data-shell="embed"] body { background: transparent; }
 html[data-shell="embed"] .content { padding: 0; }
 
-/* ---------- data-hero="plain": แบนเนอร์เรียบ ไม่มีแสงฟุ้งและแถบเฉียง (ทางการ/ผู้บริหาร/แบรนด์ที่ไม่ใช้ลวดลาย) ---------- */
-html[data-hero="plain"] .banner .glow, html[data-hero="plain"] .banner .photo { display: none; }
-html[data-hero="plain"] .banner { height: 96px; }
 
 /* ---------- data-density="compact": งานปฏิบัติการที่ต้องเห็นของเยอะในจอเดียว ---------- */
 html[data-density="compact"] body { font-size: 13px; }
@@ -609,9 +605,6 @@ html[data-density="compact"] .tile .value { font-size: min(24px, 15cqi); }
 html[data-density="compact"] td, html[data-density="compact"] th { padding: 8px 10px; }
 html[data-density="compact"] h2 { font-size: 15.5px; }
 
-/* ---------- data-cards: น้ำหนักของการ์ด ---------- */
-html[data-cards="outline"] .card { box-shadow: none; }
-html[data-cards="flat"] .card { box-shadow: none; border-color: transparent; background: var(--plane); }
 
 /* =====================================================================================================
    ชิ้นส่วนสำหรับหน้าออกแบบเอง (ทางที่ 2) — ใช้คู่กับ design/ui.js · ทางแม่แบบ ENGINE ใช้ได้ใน detail.render / kpis
@@ -651,12 +644,12 @@ html[data-shell="wall"] .chips .pill .icon { width: 26px; height: 26px; }
 /* ข้อมูลเก่า (UI.live): ตัวเลขจางเป็นสีเทา ไม่ให้จอค้างที่ "ปกติ" ดูเหมือนข้อมูลสด */
 body.stale .flow, body.stale .tiles, body.stale .chips { filter: grayscale(1); opacity: .5; transition: opacity .3s; }
 @keyframes ui-beat { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
-.livechip { display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: var(--r-ctl, 999px);
-            background: var(--surface); box-shadow: var(--shadow-sm, 0 2px 10px rgba(0,0,0,.06)); font-size: 13px; color: var(--ink-2); white-space: nowrap; }
+.livechip { display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px;
+            background: var(--surface); box-shadow: 0 2px 10px rgba(0,0,0,.06); font-size: 13px; color: var(--ink-2); white-space: nowrap; }
 
 /* การ์ดสถานะ (บอร์ดสถานะระบบ/บอท/บริการ): ชื่อ + ป้ายสถานะ + ตัวเลขหลัก + หลอด */
 .statcard { position: relative; display: grid; gap: 12px; align-content: start; min-width: 0; padding: 18px 20px;
-            border: 1px solid var(--line); border-radius: var(--r-inner, 18px); background: var(--surface); }
+            border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
 /* ของที่มีปัญหาต้องเห็นได้จากไกลทั้งใบ ส่วนของที่ปกติเงียบไว้ */
 .statcard.warn { box-shadow: inset 5px 0 0 var(--warn-mark); border-color: var(--warn-mark); background: var(--warn-soft); }
 .statcard.crit { box-shadow: inset 5px 0 0 var(--crit-mark); border-color: var(--crit-mark); background: var(--crit-soft); }
@@ -666,7 +659,7 @@ body.stale .flow, body.stale .tiles, body.stale .chips { filter: grayscale(1); o
 .statcard .sc-head .pill { margin-left: auto; }
 .statcard .sc-name { font-size: 16px; font-weight: 600; color: var(--head); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .statcard .sc-nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 10px; }
-.statcard .sc-num b { display: block; font-size: 22px; font-weight: var(--w-num, 600); line-height: 1.2; color: var(--num, var(--head)); font-variant-numeric: tabular-nums; }
+.statcard .sc-num b { display: block; font-size: 22px; font-weight: 600; line-height: 1.2; color: var(--head); font-variant-numeric: tabular-nums; }
 .statcard .sc-num span { font-size: 12px; color: var(--muted); }
 .statcard .sc-foot { font-size: 12.5px; color: var(--muted); }
 .meter { display: grid; gap: 4px; font-size: 13px; }
@@ -683,10 +676,10 @@ body.stale .flow, body.stale .tiles, body.stale .chips { filter: grayscale(1); o
 /* ตัวเลขใหญ่ + การเปลี่ยนแปลง (ผู้บริหาร/สรุปเดือน) */
 .bigstat { display: grid; gap: 4px; min-width: 0; }
 .bigstat .bs-label { color: var(--ink-2); font-size: 14px; }
-.bigstat .bs-value { font-family: var(--font-display, var(--font)), sans-serif; font-size: clamp(34px, 7vw, 56px); font-weight: var(--w-num, 600); letter-spacing: -.5px; line-height: 1.08; color: var(--num, var(--head)); font-variant-numeric: tabular-nums; }
+.bigstat .bs-value { font-family: var(--font), sans-serif; font-size: clamp(34px, 7vw, 56px); font-weight: 600; letter-spacing: -.5px; line-height: 1.08; color: var(--head); font-variant-numeric: tabular-nums; }
 .bigstat .bs-value small { font-size: .42em; font-weight: 500; color: var(--muted); letter-spacing: 0; }
 .bigstat .bs-sub { color: var(--muted); font-size: 13px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.delta { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: var(--r-pill, 999px); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.delta { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
 .delta.up { background: var(--ok-soft); color: var(--ok); }
 .delta.down { background: var(--crit-soft); color: var(--crit); }
 .delta.flat { background: var(--chip); color: var(--ink-2); }
@@ -696,7 +689,7 @@ body.stale .flow, body.stale .tiles, body.stale .chips { filter: grayscale(1); o
 .spark path.area { fill: var(--accent-soft); stroke: none; }
 
 /* แจ้งเตือนในหน้า · รายการเรียบ · ฟอร์ม */
-.notice { display: flex; gap: 10px; align-items: flex-start; padding: 12px 16px; border-radius: var(--r-inner, 16px); font-size: 13.5px; margin-bottom: 14px; }
+.notice { display: flex; gap: 10px; align-items: flex-start; padding: 12px 16px; border-radius: 16px; font-size: 13.5px; margin-bottom: 14px; }
 .notice.warn { background: var(--warn-soft); color: var(--warn); }
 .notice.crit { background: var(--crit-soft); color: var(--crit); }
 .notice.ok { background: var(--ok-soft); color: var(--ok); }
@@ -707,12 +700,12 @@ body.stale .flow, body.stale .tiles, body.stale .chips { filter: grayscale(1); o
 .lrow .lr-main { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lrow .lr-side { color: var(--muted); font-size: 12.5px; white-space: nowrap; }
 .filters .field { display: grid; gap: 4px; font-size: 12.5px; color: var(--muted); }
-.field input, .field select { height: 42px; padding: 0 16px; border: 1px solid var(--line); border-radius: var(--r-ctl, 999px); background: var(--surface);
+.field input, .field select { height: 42px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
                               color: var(--ink); font: inherit; font-size: 14px; }
 .field input:focus, .field select:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--accent-soft); }
 
 /* dialog รายละเอียด */
-dialog.dlg { border: 1px solid var(--line); border-radius: var(--r-card, 24px); padding: 0; width: min(1100px, calc(100vw - 32px)); max-height: calc(100vh - 48px);
+dialog.dlg { border: 1px solid var(--line); border-radius: 24px; padding: 0; width: min(1100px, calc(100vw - 32px)); max-height: calc(100vh - 48px);
              background: var(--surface); color: var(--ink); box-shadow: var(--pop-shadow); overflow: hidden; }
 dialog.dlg[open] { display: flex; flex-direction: column; }
 dialog.dlg::backdrop { background: rgba(0, 0, 0, .45); backdrop-filter: blur(2px); }

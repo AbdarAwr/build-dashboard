@@ -1,7 +1,7 @@
 <!doctype html>
-<!-- [แก้ 0] ตัวเลือกหน้าตา: เลือกจาก DESIGN BRIEF ด้านล่างตาม reference/design.md — ห้ามปล่อยค่าเริ่มต้นโดยไม่มีเหตุผลใน brief
-     data-shell side|top|single|wall|embed · data-hero banner|plain · data-density comfortable|compact · data-cards raised|outline|flat -->
-<html lang="th" data-shell="side" data-hero="banner" data-density="comfortable" data-cards="raised">
+<!-- [แก้ 0] โครงเมนูและความแน่น เลือกจาก brief ตาม reference/design.md — หน้าตาอื่นเป็นธีมเดิม
+     data-shell side|top|single|wall|embed · data-density comfortable|compact -->
+<html lang="th" data-shell="side" data-density="comfortable">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,8 +14,8 @@
   คนดู / ดูจากไหน   : …
   มาเพื่อตัดสินใจ    : …
   ต้องเห็นก่อนอย่างอื่น : …
-  อารมณ์ / แบรนด์    : …
-  ตัดสินใจแล้ว        : shell=… · hero=… · density=… · cards=… · รูปทรง=… · ฟอนต์=… · สี=…
+  แบรนด์              : CI ของลูกค้า (สี + โลโก้) หรือสีของทีม
+  ตัดสินใจแล้ว        : shell=… · density=… · ลำดับ section=… · ความกว้าง (w)=… · สี=…
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
   // [แก้ 2] คำนำหน้าคีย์ storage ของโปรเจกต์นี้ — ห้ามซ้ำกับโปรเจกต์อื่นที่อยู่โดเมนเดียวกัน
   var DASH_KEY = 'brandDash';
   // ธีม + แถบข้างย่อ ตั้งก่อนวาดหน้า กันกระพริบ · ไม่มีค่าที่เลือกไว้ = ตามระบบปฏิบัติการ
-  // ลองตัวเลือกอื่นโดยไม่แก้ไฟล์: ?shell=top&hero=plain&density=compact&cards=outline&theme=dark
+  // ลองตัวเลือกอื่นโดยไม่แก้ไฟล์: ?shell=top&density=compact&theme=dark
   (function () {
     var d = document.documentElement, q = new URLSearchParams(location.search);
     try {
@@ -32,16 +32,16 @@
       if (t === 'dark' || t === 'light') d.dataset.theme = t;
       if (localStorage.getItem(DASH_KEY + 'SideMini')) d.classList.add('side-mini');
     } catch (e) {}
-    ['shell', 'hero', 'density', 'cards', 'theme'].forEach(function (k) {
+    ['shell', 'density', 'theme'].forEach(function (k) {
       var v = q.get(k); if (v && /^[a-z]+$/.test(v)) d.setAttribute('data-' + k, v);
     });
   })();
 </script>
 <style>
-  /* ---------- [แก้ 3] tokens: สี ฟอนต์ รูปทรง ----------
-     ค่าด้านล่างเป็น placeholder (สีเดียวกับแม่แบบ) — แทนด้วยชุดที่ได้จาก reference/design.md (CI ของลูกค้า หรืออารมณ์ที่เลือก) ทั้ง 3 ชุด
-     แล้วรัน `python3 design/check_tokens.py <ไฟล์นี้>` ต้องผ่านทุกคู่ (ตัวหนังสือบนพื้นทั้งโหมดสว่างและมืด)
-     --font-display = ฟอนต์หัวเรื่องและตัวเลขใหญ่ (ไม่ตั้ง = ใช้ --font) · --r-card/--r-inner/--r-ctl = รูปทรง */
+  /* ---------- [แก้ 3] tokens: สีตาม CI ----------
+     ค่าด้านล่างเป็น placeholder (สีเดียวกับแม่แบบ) — แทนด้วยสีจาก CI ของลูกค้า หรือสีของทีม (reference/branding.md) ทั้ง 3 ชุด
+     แก้ได้เฉพาะสี (และ --banner-img / --mark-side ที่เป็นรูปของแบรนด์) ฟอนต์ รูปทรง และน้ำหนักเป็นของธีม ห้ามตั้งเพิ่ม
+     แล้วรัน `python3 design/check_tokens.py <ไฟล์นี้>` ต้องผ่านทุกคู่ (ตัวหนังสือบนพื้นทั้งโหมดสว่างและมืด) */
   :root {
     --page: #F4F7FA; --surface: #FFFFFF; --plane: #EEF3F8; --chip: #E4ECF3;
     --ink: #2B2F36; --ink-2: #3D4B5C; --muted: #55687C; --gray: #8496A9; --head: #12355B;
@@ -66,7 +66,6 @@
     --glow: rgba(31,182,201,.20); --photo-op: 1; --mark-op: .08;
     --shadow: 0 1px 2px rgba(12,35,64,.05), 0 8px 24px rgba(12,35,64,.06);
     --pop-shadow: 0 16px 40px rgba(12,35,64,.16);
-    --r-card: 22px; --r-inner: 16px; --r-ctl: 999px;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {

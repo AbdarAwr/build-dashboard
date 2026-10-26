@@ -1,19 +1,19 @@
 ---
 name: build-dashboard
-description: Use when asked to build, clone, or restyle any dashboard or monitoring page — admin dashboards over time-stamped records (chatbot logs, sales/orders, tickets, request logs, job runs, AI agent usage), live status boards of several systems or bots, TV/wall screens, executive or client-facing summaries, or pages embedded in an existing app — whether on the team VPS, inside an app, or as a local tool. Triggers include "ทำ dashboard", "dashboard ให้ลูกค้าใหม่", "หน้าตาเหมือน dashboard แชทบอท", "dashboard ดูการใช้งาน/สถานะระบบ", "จอทีวี/เปิดค้าง", "ให้ผู้บริหารดู", "ไม่ต้องเหมือน dashboard ของทีม", "หน้า login แอดมิน", or porting a dashboard to another brand's CI.
+description: Use when asked to build, clone, or restyle any dashboard or monitoring page — admin dashboards over time-stamped records (chatbot logs, sales/orders, tickets, request logs, job runs, AI agent usage), live status boards of several systems or bots, TV/wall screens, executive or client-facing summaries, or pages embedded in an existing app — whether on the team VPS, inside an app, or as a local tool. Triggers include "ทำ dashboard", "dashboard ให้ลูกค้าใหม่", "หน้าตาเหมือน dashboard แชทบอท", "dashboard ดูการใช้งาน/สถานะระบบ", "จอทีวี/เปิดค้าง", "ให้ผู้บริหารดู", "หน้า login แอดมิน", or porting a dashboard to another brand's CI.
 ---
 
 # Build Dashboard
 
 ## ภาพรวม
 ทุก dashboard ใช้ชุดดีไซน์เดียวกัน `design/ui.css` (แหล่งเดียวของหน้าตา) แต่**หน้าตาและเนื้อหาของแต่ละงานมาจาก brief ของงานนั้น**
-ตัวเลือกหน้าตา (`data-shell`, `data-hero`, `data-density`, `data-cards`), รูปทรง, ฟอนต์ และสี เลือกตาม `reference/design.md` งานที่ brief ต่างกันต้องออกมาต่างกัน
+**หน้าตาเป็นธีมเดียวกันทุกงาน** สิ่งที่ต่างกันได้คือ สีและโลโก้ตาม CI, โครงเมนู (`data-shell`) กับความแน่น (`data-density`) และ**เนื้อหากับการจัดเรียง**ที่มาจาก brief ตาม `reference/design.md`
 
 มีสองทาง เลือกจากคนดูและข้อมูล:
 
 | ทาง | ใช้เมื่อ | เริ่มจาก |
 |---|---|---|
-| **1. ENGINE** | คนดู**ไล่แถวข้อมูลเอง**: ข้อมูลเป็นแถวที่มีเวลา และต้องใช้ตัวกรองช่วง ตารางค้นหา ส่งออก CSV หรือหน้ารายละเอียด (แอดมินบอท, ทีมซัพพอร์ต, ทีมปฏิบัติการ) | `template/dashboard.html` แก้เฉพาะ CONFIG, token, ตัวเลือกหน้าตา และ assets |
+| **1. ENGINE** | คนดู**ไล่แถวข้อมูลเอง**: ข้อมูลเป็นแถวที่มีเวลา และต้องใช้ตัวกรองช่วง ตารางค้นหา ส่งออก CSV หรือหน้ารายละเอียด (แอดมินบอท, ทีมซัพพอร์ต, ทีมปฏิบัติการ) | `template/dashboard.html` แก้เฉพาะ CONFIG, token สี, โครงเมนู และ assets |
 | **2. ออกแบบเอง** | คนดู**ต้องการคำตอบ**: สถานะสดของหลายระบบ, จอทีวี, สรุปผู้บริหาร/ลูกค้า, ข้อมูลไม่มีเวลาต่อแถว, รวมหลายแหล่ง หรือฝังในแอปเดิม (แม้ต้นทางเป็นแถว เช่น คำสั่งซื้อ ก็ใช้ทางนี้ได้) | `design/page.html` + `ui.css` + `ui.js` เขียน `LAYOUT` และ render ของแต่ละ section |
 
 ห้ามเขียน CSS ของโครงหน้า การ์ด กราฟ หรือปุ่มขึ้นใหม่ในทั้งสองทาง และห้ามก็อป dashboard ของโปรเจกต์อื่นมาทั้งไฟล์
@@ -27,7 +27,7 @@ description: Use when asked to build, clone, or restyle any dashboard or monitor
 
 ## ขั้นตอน
 1. **เขียน brief แล้วเลือกทาง**
-   - brief ของเนื้อหาตาม `reference/layout.md` (คนอ่าน, หนึ่งแถวคืออะไร, คำถาม 3–5 ข้อเรียงตามความสำคัญ, เกณฑ์ที่มีอยู่จริงพร้อมนิยาม, ลิงก์กลับระบบต้นทาง, ที่รัน) และ design brief ตาม `reference/design.md` (ดูจากไหน, ต้องเห็นอะไรก่อน, อารมณ์/แบรนด์)
+   - brief ของเนื้อหาตาม `reference/layout.md` (คนอ่าน, หนึ่งแถวคืออะไร, คำถาม 3–5 ข้อเรียงตามความสำคัญ, เกณฑ์ที่มีอยู่จริงพร้อมนิยาม, ลิงก์กลับระบบต้นทาง, ที่รัน) และ brief ส่วนหน้าจอตาม `reference/design.md` (ดูจากไหน, ต้องเห็นอะไรก่อน, แบรนด์)
    - เลือกทางจากตารางด้านบน แล้วเปิดสูตรที่ใกล้ที่สุดใน `reference/recipes.md`
    - ถามเฉพาะสิ่งที่หาเองไม่ได้: CI/โลโก้, endpoint และคอลัมน์, เกณฑ์และนิยาม (ถ้าไม่มีก็ไม่ต้องมีการ์ดนั้น), ดูจากจอไหน, ที่ deploy และผู้ใช้ · แชทบอทให้ถามเพิ่มตาม `reference/chatbot-data.md`
    - ถ้าถาม user ไม่ได้ ให้ใช้ค่าที่สมเหตุสมผลที่สุด แล้วเขียนเป็น "ข้อเสนอที่ต้องยืนยัน" ไว้ใน brief และในข้อความส่งงาน
@@ -43,7 +43,7 @@ description: Use when asked to build, clone, or restyle any dashboard or monitor
    # ทาง 2 ออกแบบเอง
    cp $S/design/page.html $P/web/index.html && cp $S/design/{ui.css,ui.js} $P/web/ && cp $S/tests/test_page.py $P/tests/
    ```
-3. **ออกแบบหน้าตา** ตาม `reference/design.md`: เขียน DESIGN BRIEF ที่หัวไฟล์, ตั้ง `data-shell/hero/density/cards` ที่ `<html>`, token สี/ฟอนต์/รูปทรงทั้ง 3 ชุดตาม `reference/branding.md` แล้วรัน `python3 $S/design/check_tokens.py $P/web/<ไฟล์>` ต้องผ่านทุกคู่
+3. **ตั้งโครงหน้าและสี** ตาม `reference/design.md`: เขียน DESIGN BRIEF ที่หัวไฟล์, ตั้ง `data-shell` และ `data-density` ที่ `<html>`, token สีทั้ง 3 ชุดและโลโก้ตาม `reference/branding.md` (ฟอนต์ รูปทรง และการ์ดเป็นของธีม ไม่ต้องแก้) แล้วรัน `python3 $S/design/check_tokens.py $P/web/<ไฟล์>` ต้องผ่านทุกคู่
 4. **ใส่เนื้อหา**
    - **ทาง 1:** แก้ CONFIG ตาม `reference/config.md` ตั้ง `DASH_KEY` ไม่ให้ซ้ำโปรเจกต์อื่น (และตรงกับ login.html), ตั้ง `AUTH`, เลือก `PRESET` แล้ว**ลบ preset ที่ไม่ใช้ทิ้ง**, เขียนการ์ดตามลำดับ KPI → `layout` → trend → breakdown → rankings → table → detail → notifs ตามกติกาใน `layout.md` (คนดูเป็นลูกค้า ใส่ `brand.role`)
    - **ทาง 2:** แก้ `PAGE` (source, refreshSec, `at` = เวลาของข้อมูล) และ `LAYOUT` (ลำดับ, ความกว้าง `w`, เมนู) แล้วเขียน render ของแต่ละ section ด้วยชิ้นส่วนใน `design.md` ข้อ 5 · **ลบ section ตัวอย่างและ `demo()` ทิ้งทั้งหมด** · หน้าที่รีเฟรชเองให้หลังบ้านส่ง `generated_at`
@@ -75,7 +75,7 @@ description: Use when asked to build, clone, or restyle any dashboard or monitor
 | ทำ | เหตุผล |
 |---|---|
 | ทุกการ์ดต้องชี้กลับไปที่คำถามใน brief ได้ การ์ดไหนชี้ไม่ได้ให้ตัดทิ้ง | หน้าจะยาวโดยไม่ช่วยให้ตัดสินใจ และคนอ่านจะไม่รู้ว่าควรดูตรงไหน |
-| ตัวเลือกหน้าตา รูปทรง ฟอนต์ และสี ต้องมีเหตุผลจาก design brief | ถ้าใช้ค่าเริ่มต้นทุกงาน ทุกหน้าจะออกมาเหมือนกัน ทั้งที่คนดูและจอต่างกัน |
+| หน้าตาเป็นธีมเดิมทุกงาน: เปลี่ยนได้แค่สี/โลโก้ตาม CI, โครงเมนู และเนื้อหากับการจัดเรียง ห้ามตั้งฟอนต์ รูปทรง เงา หรือสไตล์การ์ดใหม่ | user ต้องการให้ทุก dashboard อยู่ในธีมเดียวกัน ความต่างของแต่ละงานต้องมาจากเนื้อหาและลำดับ |
 | แก้หน้าตาที่ `design/ui.css` ของสกิลแล้วรัน `design/sync.py` (ฝังลงแม่แบบให้เอง) ส่วน CSS เฉพาะหน้าใส่ใน `[แก้ 4]` ของ page.html หรือ `[แก้ CSS]` ของแม่แบบ ด้วย token เท่านั้น | หน้าตาทุกโปรเจกต์มาจากแหล่งเดียว แก้ทีเดียวได้ทุกหน้า |
 | หน้าที่รีเฟรชเองต้องบอกความสดของข้อมูล (`UI.live` + `generated_at`) | จอที่ค้างแล้วยังบอกว่าปกติ ทำให้ไม่มีใครรู้ว่าระบบล่ม |
 | ใช้การ์ดของ preset chatbot (โควตา, session, คีย์เวิร์ด, คุณภาพคำตอบ) กับข้อมูลแชทบอทเท่านั้น | ข้อมูลอื่นมีคำถามของมันเอง ดู `recipes.md` |
@@ -89,14 +89,14 @@ description: Use when asked to build, clone, or restyle any dashboard or monitor
 | อาการ | สาเหตุ / วิธีแก้ |
 |---|---|
 | เจอข้อมูลที่ไม่มีเวลาต่อแถว แล้วคิดว่าสกิลใช้ไม่ได้ | ใช้ทาง 2 (ออกแบบเอง) ซึ่งไม่ผูกกับช่วงเวลา |
-| user บอก "ไม่ต้องเหมือน dashboard ของทีม" แล้วเขียน CSS ทับแม่แบบทั้งหน้า | เลือกตัวเลือกหน้าตา/รูปทรง/ฟอนต์/สีใหม่ตาม `design.md` ถ้าคนดูไม่ได้ไล่แถวข้อมูล ให้ใช้ทาง 2 |
+| ลูกค้าขอหน้าตาที่ไม่เหมือนธีม แล้วเขียน CSS ทับทั้งหน้า | ถาม user ก่อน ระหว่างนั้นใช้ธีมเดิมกับสี CI ของลูกค้า และทำให้ต่างด้วยเนื้อหา/การจัดเรียง ถ้าคนดูไม่ได้ไล่แถวข้อมูล ให้ใช้ทาง 2 |
 | หน้าผู้บริหาร/ลูกค้ามีตารางยาว ปุ่มส่งออก ตัวกรองช่วงทั้งหน้า หรือคำว่า "ผู้ดูแลระบบ" | คนดูไม่ได้ไล่แถว ใช้ทาง 2 · ถ้าต้องอยู่ทาง 1 ให้ตั้ง `brand.role` |
 | จอทีวีตัวเล็กอ่านจากไกลไม่ได้ หรือมีเมนู/ปุ่ม | ใช้ `data-shell="wall"` (ขยายตามจอ ซ่อนเมนูและ `.wall-hide`) และตรวจด้วย `page_check.py --fit` |
 | ยอดกลางเดือน 42% ของเป้าดูน่าตกใจ | ใส่ `mark` ใน meter (`UI.monthPace().pct`) ให้เห็นว่าควรถึงเท่าไรแล้ว |
 | ตัวเลขเงินขึ้น "5.6M" ในหน้าของผู้บริหารไทย | ใช้ `UI.fmtMillion` ("5.13 ล้าน") |
 | เหลือ section ตัวอย่างร้านค้าออนไลน์ของ page.html | ลบ `demo()` และ section ที่ไม่ใช้ แล้วรัน grep ในขั้นที่ 6 |
 | หน้าทาง 2 ขึ้น "ข้อมูลไม่อัปเดตมา" ตลอด หรือนานผิดปกติ | หลังบ้านไม่ส่งเวลาของข้อมูล: ส่ง `generated_at` หรือ header `X-Generated-At`/`Last-Modified` (`serving.md`) และตั้ง `staleSec` ตามรอบอัปเดตจริง |
-| หน้าผู้บริหารต้องเขียน CSS ทับเยอะเพื่อให้ดูพรีเมียม | ใช้สูตรอารมณ์ "ทางการ พรีเมียม" ใน `design.md` (token น้ำหนัก, สีตัวเลข, รูปทรง, เส้นเป้า, ไม่มีไอคอนหัวการ์ด) ก่อนเขียน CSS เอง |
+| หน้าผู้บริหารดูรกเหมือนหน้าทีม | ปรับที่เนื้อหาและการจัดเรียง: `data-shell="single"`, ตัด section ที่ไม่ตอบคำถาม, ตัวเลขหลักเป็น `.bigstat` ในการ์ดกว้าง, ไม่มีตารางยาว/ปุ่มส่งออก — ไม่ใช่เขียน CSS เปลี่ยนหน้าตา |
 | ตัวตรวจ token ไม่ผ่านที่ `--ic-ink บน --ic-bg` หรือ `--side-sub` | ไอคอนกลางวงกลมวัดที่สีกลางของ gradient ส่วนคำท้ายแถบข้างวัดที่ปลาย gradient ให้เข้ม/อ่อนลงจนผ่าน |
 | การ์ดเดือนนี้หรือหลอดโควตาโผล่ในงานที่ไม่มีเพดาน | ยกมาจาก preset chatbot ให้ตัดออก ถ้าไม่มีเกณฑ์จริงก็ไม่ต้องมี `meter` |
 | ตัวเลข KPI เล็กจนอ่านยาก | ค่ายาวเกิน 9 ตัวอักษร ให้ใช้ `fmtCompact` แล้วใส่ตัวเลขเต็มใน hint |
