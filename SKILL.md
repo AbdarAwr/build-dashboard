@@ -49,11 +49,11 @@ description: Use when asked to build, clone, or restyle any dashboard or monitor
    - **ทาง 2:** แก้ `PAGE` (source, refreshSec, `at` = เวลาของข้อมูล) และ `LAYOUT` (ลำดับ, ความกว้าง `w`, เมนู) แล้วเขียน render ของแต่ละ section ด้วยชิ้นส่วนใน `design.md` ข้อ 5 · **ลบ section ตัวอย่างและ `demo()` ทิ้งทั้งหมด** · หน้าที่รีเฟรชเองให้หลังบ้านส่ง `generated_at`
    - ไล่แก้ทุกจุดที่ `grep -n "\[แก้" $P/web/*.html` เจอ
 5. **เทสต์**
-   - `python3` ในคำสั่งด้านล่าง = Python ที่ติดตั้ง pytest + playwright แล้ว (และมี Google Chrome ในเครื่อง)
+   - `python3` ในคำสั่งด้านล่าง = Python ที่ติดตั้ง pytest + playwright แล้ว (และมี Google Chrome ในเครื่อง) ถ้ามี `local/team-notes.md` ให้ใช้ Python ตัวที่ระบุไว้ในนั้นแทน
    - **ทั้งสองทาง:** `python3 $P/tests/page_check.py --web $P/web --json /api/<x>=<ข้อมูลสังเคราะห์>.json --out $P/tests/shots` ที่ขนาดจอตาม brief (จอทีวีใส่ `--sizes 1280x720,1920x1080,3840x2160 --schemes dark --fit`, หน้าที่มีเซิร์ฟเวอร์ของตัวเองใช้ `--url`) ต้องผ่านทุกกรณี แล้ว**เปิดภาพดูเอง**ตามข้อ 6 ของ `design.md`
    - **ทาง 1:** แก้ `fixture.py` ให้คอลัมน์ตรงกับข้อมูลจริง แต่ค่าทั้งหมดต้องสังเคราะห์ และมีแถวขอบ (เวลา 00:30 ของวันนี้, ข้อความที่ขึ้นต้นด้วย `=`, แถวที่ `keep` ต้องตัดทิ้ง) · ใน `test_template.py` ให้เหลือเฉพาะ section ของ preset ที่ใช้ (หัว `# ===== preset: …`) แล้วเปลี่ยนกติกาและ id ของ KPI ให้ตรงกับ CONFIG ส่งข้อมูลผ่าน `serve_in_thread(data={path: (rows, columns)})` · `AUTH = 0` ให้ใช้ `serve_in_thread(..., auth=False)` และลบเทสต์ login · ดูหน้าด้วยข้อมูลของโปรเจกต์: `python3 $P/tests/stub_server.py --web $P/web --csv data.csv --path /api/<ชื่อ>.csv --no-auth` แล้วเปิด `/dashboard/?now=2026-10-14T15:05:00%2B07:00` · รัน `python3 -m pytest $P/tests/test_template.py -q -p no:cacheprovider` ต้องผ่านทุกข้อ
    - **ทาง 2:** แก้ค่า `[แก้]` บนหัว `test_page.py` (endpoint → ไฟล์ข้อมูลสังเคราะห์, ขนาดจอ, `NOW`) แล้วรัน `python3 -m pytest $P/tests/test_page.py -q -p no:cacheprovider` (ทุกขนาดจอ/ธีม, ทุก section ขึ้นข้อมูล, โหลดไม่ได้, ข้อมูลค้าง) แล้ว**เพิ่มเทสต์ของหน้านั้นเอง**: ตัวเลขบนหน้าเทียบกับที่คำนวณจากไฟล์ข้อมูลด้วย Python และกรณีขอบ (ค่า null, สถานะที่ไม่รู้จัก, รายการว่าง, ชื่อยาว, ข้อความที่มี `<`, จำนวนการ์ดมากกว่าปกติ) ตัวอย่างอยู่ใน `tests/test_design.py` ของสกิล
-6. **ตรวจว่าไม่มีของค้าง** คำสั่งด้านล่างต้องไม่เจออะไรเลย (บรรทัดแรกหา placeholder, บรรทัดที่สองหาข้อมูลตัวอย่างของ page.html, บรรทัดที่สามหาชื่อลูกค้ารายอื่น)
+6. **ตรวจว่าไม่มีของค้าง** คำสั่งด้านล่างต้องไม่เจออะไรเลย (บรรทัดแรกหา placeholder, บรรทัดที่สองหาข้อมูลตัวอย่างของ page.html, บรรทัดที่สามหาชื่อลูกค้ารายอื่น — รายชื่อจริงอยู่ใน `local/team-notes.md`)
    ```bash
    grep -nwE "Brand|brandDash|ชื่อระบบ" $P/web/*.html; grep -nE "example\.com|#1FB6C9|#1B5FA8|#12355B|คำอธิบายสั้น" $P/web/*.html; grep -l placeholder $P/web/assets/*.svg
    grep -nE "demo\(|ร้านค้าออนไลน์|เสื้อยืดคอกลม" $P/web/*.html
@@ -62,7 +62,7 @@ description: Use when asked to build, clone, or restyle any dashboard or monitor
    - เครื่องมือภายในที่ไม่มีลูกค้าก็ต้องผ่าน โดยใช้สัญลักษณ์ของเครื่องมือนั้นแทนโลโก้ placeholder
    - ถ้าบรรทัดสุดท้ายเจอชื่อที่เป็นข้อมูลจริงของโปรเจกต์นี้ (เช่น ชื่อลูกค้าที่อยู่ในข้อมูล ticket) ถือว่าผ่าน
    - ทาง 1: ตรวจด้วยตาว่า `exportName` เป็นชื่อของโปรเจกต์ และถ้าใช้ `logs.html` สีพื้นกับสีลิงก์ต้องตรงกับ token
-7. **Deploy** ตามที่รันใน `reference/serving.md`
+7. **Deploy** ตามที่รันใน `reference/serving.md` และวิธีของทีม (ที่เก็บสคริปต์ deploy, การตรวจหน้า live) ใน `local/team-notes.md`
    - **VPS ของทีม**
      - ทาง 1 วางไฟล์: `dashboard.html` → `/var/www/<proj>/dashboard/index.html`, `login.html` → `login/index.html`, `logs.html` → `logs/index.html`, `assets/` → `/var/www/<proj>/assets/` (assets ต้องเปิดได้โดยไม่ต้อง login) · ทาง 2 วาง `index.html`, `ui.css`, `ui.js`, `assets/` ไว้โฟลเดอร์เดียวกัน
      - ลูกค้าใหม่ที่ยังไม่มีหลังบ้าน: ทำ endpoint ข้อมูลตามสัญญาใน `serving.md` และใช้ login gate ของทีม (หรือ IP allowlist สำหรับจอทีวี)
